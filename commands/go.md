@@ -99,9 +99,13 @@ current workspace.
 
 ## Phase 1: Plan
 
+**Always tell Bob which mode he's in** (INTERACTIVE or AUTOPILOT). In AUTOPILOT nobody can answer
+his clarifying questions, so he resolves them himself and reports them back under **Assumptions** —
+carry those into the PR description.
+
 ### TICKET Flow
 
-- Delegate to Bob (`ticket-planner` agent) with the ticket ID
+- Delegate to Bob (`ticket-planner` agent) with the ticket ID and the current mode
 - Bob fetches the ticket, explores the codebase, and produces:
   - Summary (what, why, acceptance criteria)
   - 2-3 approaches with **(Recommended)** marked
@@ -115,9 +119,11 @@ current workspace.
   <!-- SETUP: {{TICKET_DEFAULTS}} — add your default flags here (board/sprint/assignee/type) so
        quick wins land where your team expects. If you don't use a tracker at all, delete this
        bullet and derive the branch name from the description instead. -->
-- Then analyze the task description directly in the main context
+- Then delegate to Bob with the task description, the new ticket ID, and the current mode. He skips
+  the tracker fetch and plans from the description — quick wins get the same codebase exploration
+  as tickets, which matters most in AUTOPILOT where no one is watching the plan
 - Domain skills will auto-trigger based on the task area
-- Produce 2-3 approaches with **(Recommended)** marked
+- Bob produces 2-3 approaches with **(Recommended)** marked
 
 ### Approach Selection
 
