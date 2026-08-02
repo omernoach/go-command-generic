@@ -1,21 +1,6 @@
 <div align="center">
 
-```
-                    ▄▄▄▄▄▄▄▄▄▄▄
-                 ▄█▀▀         ▀▀█▄
-               ▄█▀   ▄▄▄▄▄▄▄▄▄   ▀█▄
-              ██   ▄█▀       ▀█▄   ██
-             ██   ██   ▄▄▄▄▄   ██   ██
-             ██   ██  █  ●  █  ██   ██
-             ██   ██   ▀▀▀▀▀   ██   ██
-             ██    ▀█▄▄▄▄▄▄▄▄▄█▀    ██
-             ██                     ██
-             ██    ▄▄▄▄▄▄▄▄▄▄▄▄▄    ██
-             ██     ▀▀▀▀▀▀▀▀▀▀▀     ██
-              ▀█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█▀
-                 ██▀▀▀     ▀▀▀██
-                 ██           ██
-```
+<img src="https://media.tenor.com/A3lLdiPt95AAAAAM/work-minions.gif" width="320" alt="minions working">
 
 # 🍌 go-command 🍌
 
@@ -145,15 +130,3 @@ Worth adding once the basics work:
 
 Claude Code, `git`, and `gh` for PRs. A tracker MCP (Jira, Linear, …) is only needed for the ticket
 steps — everything else works without one.
-
-<div align="center">
-
----
-
-**Poopaye!** 🍌
-
-```
-   🍌        🍌        🍌        🍌        🍌
-```
-
-</div>
