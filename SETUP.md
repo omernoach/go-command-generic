@@ -74,9 +74,12 @@ Keep this to one round. Good questions:
 3. **PR policy** — draft by default? A template? Companion PRs in another repo?
 4. **Post-ship artifact** — is there a build the user runs to test locally (an extension bundle, a
    container image, a CLI binary)? Which changes justify it?
-5. **Persona** — should the agents have a theme and a name for the user, or stay neutral? This
-   sounds cosmetic; it isn't. A consistent voice makes a long autonomous run far easier to skim,
-   and it makes phase boundaries obvious at a glance.
+5. **Persona** — the crew ships themed as Minions (Bob 🥽 plans, Carl 🔍 validates, Kevin 👔
+   reviews, Stuart 👁️ tests, and the user is "Boss Gru"). Keep it, or re-theme? This sounds
+   cosmetic; it isn't. A consistent voice makes a long autonomous run far easier to skim, and named
+   characters make phase boundaries obvious at a glance. **Default to keeping it** — only change it
+   if the user asks. If they do re-theme, re-theme all four agent files *and* `go.md` together, so
+   the voice stays consistent across handoffs.
 
 Don't ask about anything you can read from their repos.
 
