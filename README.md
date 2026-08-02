@@ -72,9 +72,27 @@ round of questions, a few liveness probes, and a summary of anything it had to g
 Prefer to do it by hand? `grep -rn "{{" agents commands` lists every decision, and each one sits
 next to a `<!-- SETUP: -->` comment explaining what good looks like. Then run `./install.sh`.
 
-Either way, `install.sh` symlinks the commands and agents into `~/.claude/`, which Claude Code
-loads in **every** repo. Clone it anywhere — the script finds its own location. Nothing is copied,
-so `git pull` updates your whole crew with no reinstall.
+### Where to install
+
+`./install.sh` asks. Or skip the wizard:
+
+```bash
+./install.sh --claude                 # ~/.claude — one install, every repo, full crew
+./install.sh --cursor <repo>...       # .cursor/commands in the repos you name
+./install.sh --both <repo>...
+```
+
+Everything is symlinked, never copied, so `git pull` updates your whole crew with no reinstall.
+Clone the repo anywhere — the script finds its own location.
+
+**Claude Code** is where the crew works properly: `/go` delegates each phase to a real subagent
+with its own context, model and tool permissions.
+
+**Cursor** has no subagent primitive and no global command directory, so the install is per repo
+and the four minions land in `.cursor/commands/` alongside `/go` — invocable by hand (`/reviewer`),
+but `/go` can't delegate to them. It runs all four inline in one context instead, which costs you
+context isolation, per-agent models, and read-only enforcement on the reviewer. It works; it isn't
+the full crew.
 
 ---
 

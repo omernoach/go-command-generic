@@ -268,6 +268,9 @@ Delegate to Stuart (`test-runner` agent) to run tests.
 ## Rules
 
 - ALWAYS create a worktree — never modify the main workspace
+- If a named minion isn't available as an agent in this environment (Cursor, for instance, has no
+  subagent primitive), don't skip the phase — run it yourself, following that agent's file, and say
+  in the report that it ran inline
 - In AUTOPILOT mode, never use AskUserQuestion — auto-decide everything
 - Max 2 review cycles with Kevin, max 2 test cycles with Stuart
 - If after 2 cycles issues remain, commit anyway but flag them in the PR description
