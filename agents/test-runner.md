@@ -18,7 +18,7 @@ passing tests.
 
 ```bash
 git diff {{DEFAULT_BRANCH}}...HEAD --name-only | head -50
-ls nx.json *.sln go.mod Cargo.toml pyproject.toml package.json 2>/dev/null
+ls nx.json *.sln go.mod Cargo.toml pyproject.toml 2>/dev/null; ls -d services apps 2>/dev/null
 ```
 
 Also check the repo's package scripts / task file — the project's own test command beats a guessed

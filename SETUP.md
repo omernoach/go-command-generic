@@ -208,10 +208,13 @@ grep -h "^name:" agents/*.md   # must be: ticket-planner, plan-reviewer, reviewe
 Print the detection command from each file and confirm they read the same:
 
 ```bash
-for f in commands/go.md agents/plan-reviewer.md agents/reviewer.md agents/test-runner.md; do
-  printf "%-26s %s\n" "$(basename "$f")" "$(grep -m1 -o 'ls .*' "$f")"
+for f in commands/go.md agents/*.md; do
+  printf "%-26s %s\n" "$(basename "$f")" "$(grep -m1 -oE '^ *ls [-a-z]*\.?[a-z]*.*' "$f")"
 done
 ```
+
+All five must print the same command. (Anchor the pattern to a line starting with `ls` — an
+unanchored `ls .*` matches prose like "fai**ls at** push time".)
 
 Divergence here is silent, so check it rather than trusting the paste.
 
