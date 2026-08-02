@@ -59,7 +59,7 @@ git clone git@github.com:omernoach/go-command-generic.git go-command
 cd go-command
 ```
 
-Then open Claude Code in that directory and say:
+Then open your agent (Claude Code, or Cursor) in that directory and say:
 
 > ### 🍌 *"read SETUP.md and set this up for my repos"*
 
@@ -147,5 +147,20 @@ Worth adding once the basics work:
 
 ## 🍌 Requirements
 
-Claude Code, `git`, and `gh` for PRs. A tracker MCP (Jira, Linear, …) is only needed for the ticket
-steps — everything else works without one.
+**Claude Code or Cursor**, plus `git` and `gh` for PRs. A tracker MCP (Jira, Linear, …) is only
+needed for the ticket steps — everything else works without one.
+
+The two are not equivalent, and the difference is worth knowing before you pick:
+
+| | Claude Code | Cursor |
+|---|---|---|
+| `/go` and `/create-ticket` | ✅ | ✅ |
+| Install scope | global — every repo, one install | per repo (`.cursor/commands/`) |
+| The four minions | real subagents, delegated per phase | commands you can invoke by hand |
+| Context isolation per phase | ✅ | ✗ — all four share one context |
+| Per-agent model (Stuart on a cheap one) | ✅ | ✗ |
+| Read-only enforcement on Kevin | ✅ | ✗ |
+
+Cursor has no subagent primitive, so `/go` runs each phase inline instead of delegating — it
+follows the same agent files and produces the same shape of output, but the isolation and the
+per-agent limits are gone. Setup and the placeholder system work identically in both.
