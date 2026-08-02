@@ -61,12 +61,13 @@ cd go-command
 
 Then open Claude Code in that directory and say:
 
-> ### 🍌 *"read SETUP.md and set this up for my repos in ~/work"*
+> ### 🍌 *"read SETUP.md and set this up for my repos"*
 
-Claude scans your repos, reads their `AGENTS.md`/`CLAUDE.md` files, infers your stacks, package
-managers, test commands, ticket prefix and branch conventions, asks about the handful of things it
-can't detect, fills every placeholder, and runs `./install.sh`. Expect one round of questions and a
-summary of anything it had to guess.
+It asks which repos to cover — a folder, several folders, or individual paths, whatever your
+layout is. Then it reads their `AGENTS.md`/`CLAUDE.md` files and your existing skills, infers your
+stacks, package managers, test commands, ticket prefix and branch conventions, asks about the
+handful of things it can't detect, fills every placeholder, and runs `./install.sh`. Expect one
+round of questions, a few liveness probes, and a summary of anything it had to guess.
 
 Prefer to do it by hand? `grep -rn "{{" agents commands` lists every decision, and each one sits
 next to a `<!-- SETUP: -->` comment explaining what good looks like. Then run `./install.sh`.

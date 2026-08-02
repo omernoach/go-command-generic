@@ -22,7 +22,7 @@ echo
 if grep -rq "{{" --include="*.md" "$REPO/agents" "$REPO/commands"; then
   echo "Linked, but the placeholders are still unfilled — /go will be generic until you do."
   echo "Open Claude Code in this repo and say:"
-  echo "    read SETUP.md and set this up for my repos in ~/work"
+  echo "    read SETUP.md and set this up for my repos"
 else
   echo "Done. If an agent ever behaves like an older version, check for a project-level copy"
   echo "shadowing it:  find ~ -path '*/.claude/agents/*.md' -not -path '*/plugins/*'"
