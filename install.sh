@@ -79,6 +79,26 @@ install_claude() {
   echo "  Claude Code:"
   for f in "$REPO"/agents/*.md;   do link "$f" ~/.claude/agents/"$(basename "$f")"; done
   for f in "$REPO"/commands/*.md; do link "$f" ~/.claude/commands/"$(basename "$f")"; done
+  install_grilling
+}
+
+# /go ... grill runs Matt Pocock's `grilling` skill, which ships in the mattpocock-skills plugin.
+install_grilling() {
+  if ! command -v claude >/dev/null 2>&1; then
+    echo "  skip  grilling skill (claude CLI not on PATH — /go grill falls back to inline)"
+    return
+  fi
+  if claude plugin list 2>/dev/null | grep -q "mattpocock-skills"; then
+    echo "  have  grilling skill (mattpocock-skills already installed)"
+    return
+  fi
+  claude plugin marketplace add anthropics/claude-plugins-official >/dev/null 2>&1 || true
+  if claude plugin install mattpocock-skills@claude-plugins-official --scope user >/dev/null 2>&1; then
+    echo "  plug  grilling skill (mattpocock-skills) — /go <task> grill is live"
+  else
+    echo "  skip  grilling skill — install it yourself with:"
+    echo "        claude plugin install mattpocock-skills@claude-plugins-official"
+  fi
 }
 
 install_cursor() {

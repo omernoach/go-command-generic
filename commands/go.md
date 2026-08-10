@@ -1,6 +1,6 @@
 ---
 name: Go
-description: "Assemble the minions! Full workflow: plan, implement, review, test, PR. Use /go <TICKET-ID> for tickets or /go <description> for quick wins. Add 'autopilot' for fully autonomous background execution."
+description: "Assemble the minions! Full workflow: plan, implement, review, test, PR. Use /go <TICKET-ID> for tickets or /go <description> for quick wins. Add 'autopilot' for fully autonomous background execution, or 'grill' to stress-test the plan before code is written."
 ---
 
 # /go
@@ -32,15 +32,20 @@ Parse the user's input after `/go`:
 
 1. **Check for `autopilot`** anywhere in the input. If present, remove it and set mode to AUTOPILOT.
    Otherwise mode is INTERACTIVE.
-2. **Check for a ticket ID** matching `{{TICKET_PREFIX}}-\d+`. If present, this is a TICKET flow.
-3. **If no ticket ID**, this is a QUICK WIN flow — the remaining input is the task description.
+2. **Check for `grill`** anywhere in the input. If present, remove it and set GRILL (Phase 1.25).
+   Grilling is a conversation, so it needs someone to answer — in AUTOPILOT it's ignored, say so in
+   one line.
+3. **Check for a ticket ID** matching `{{TICKET_PREFIX}}-\d+`. If present, this is a TICKET flow.
+4. **If no ticket ID**, this is a QUICK WIN flow — the remaining input is the task description.
 
 Examples:
 
 - `/go {{TICKET_PREFIX}}-123456` → INTERACTIVE + TICKET
 - `/go {{TICKET_PREFIX}}-123456 autopilot` → AUTOPILOT + TICKET
+- `/go {{TICKET_PREFIX}}-123456 grill` → INTERACTIVE + GRILL + TICKET
 - `/go Add a colour picker to the settings page` → INTERACTIVE + QUICK WIN
 - `/go autopilot Add a colour picker to the settings page` → AUTOPILOT + QUICK WIN
+- `/go grill Add a colour picker to the settings page` → INTERACTIVE + GRILL + QUICK WIN
 
 ---
 
@@ -130,6 +135,29 @@ carry those into the PR description.
 - **INTERACTIVE mode**: Use AskUserQuestion to ask Boss Gru which approach to take. Wait for response.
 - **AUTOPILOT mode**: Automatically select the approach marked **(Recommended)**. Announce:
   "Autopilot engaged! Going with the recommended approach. Bee do bee do! 🍌"
+
+---
+
+## Phase 1.25: Grill (only when GRILL is set)
+
+Skip this phase entirely unless GRILL was set during input parsing.
+
+Invoke the `mattpocock-skills:grilling` skill on the chosen approach and run the session to
+completion — round by round, until the frontier is empty and Boss Gru confirms shared understanding.
+Grill the *decisions*: scope boundaries, edge cases, what's explicitly out of scope, what the
+acceptance criteria don't say. Look up facts yourself, never ask Boss Gru for something the codebase
+can answer.
+
+When the session ends, write the settled decisions into the plan as **Decisions** and carry them
+forward — Carl gets them in Phase 1.5, they constrain implementation in Phase 2, and they go in the
+PR description. A decision settled in the grill is not up for renegotiation later.
+
+Grill answers "is this the right thing to build?" — Carl answers "will it work in this codebase?".
+Both run; neither replaces the other.
+
+<!-- SETUP: this phase needs the `grilling` skill, installed by `./install.sh` (mattpocock-skills
+     plugin). If it isn't installed, run the grill inline from the same idea: rounds of numbered
+     questions with a recommended answer each, one round per layer of the design tree. -->
 
 ---
 
@@ -272,6 +300,7 @@ Delegate to Stuart (`test-runner` agent) to run tests.
   subagent primitive), don't skip the phase — run it yourself, following that agent's file, and say
   in the report that it ran inline
 - In AUTOPILOT mode, never use AskUserQuestion — auto-decide everything
+- `grill` and `autopilot` are mutually exclusive — a grill with nobody answering is just a delay
 - Max 2 review cycles with Kevin, max 2 test cycles with Stuart
 - If after 2 cycles issues remain, commit anyway but flag them in the PR description
 - Don't add markdown documentation files to the PR

@@ -15,9 +15,15 @@ they ship it. You eat da banana.* 🍌
 /go PROJ-1234              # plan → Carl checks it → build → Kevin reviews → Stuart tests → PR
 /go Fix the login crash    # no ticket? Bob makes one first
 /go PROJ-1234 autopilot    # bee do bee do bee do — fully autonomous, no questions
+/go PROJ-1234 grill        # opposite of autopilot — grilled about the plan until it's airtight
 ```
 
 Every run happens in its own git worktree, so an autonomous minion never touches your working copy.
+
+`grill` runs [Matt Pocock's `grilling` skill](https://github.com/mattpocock/skills) on the chosen
+approach before Carl sees it: rounds of numbered questions, each with a recommended answer, until
+nothing about the design is silently assumed. The settled decisions ride along into the review, the
+implementation, and the PR description. `install.sh` installs the skill for you.
 
 ---
 
