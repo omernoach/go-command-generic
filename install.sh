@@ -77,27 +77,43 @@ install_claude() {
   mkdir -p ~/.claude/agents ~/.claude/commands
   echo
   echo "  Claude Code:"
+  prune_dangling ~/.claude/agents ~/.claude/commands
   for f in "$REPO"/agents/*.md;   do link "$f" ~/.claude/agents/"$(basename "$f")"; done
   for f in "$REPO"/commands/*.md; do link "$f" ~/.claude/commands/"$(basename "$f")"; done
-  install_grilling
+  install_plugins
 }
 
-# /go ... grill runs Matt Pocock's `grilling` skill, which ships in the mattpocock-skills plugin.
-install_grilling() {
+# Removes links into this repo whose target no longer exists (e.g. a deleted agent).
+prune_dangling() {
+  for d in "$@"; do
+    for l in "$d"/*.md; do
+      [ -L "$l" ] || continue
+      case "$(readlink "$l")" in "$REPO"/*) ;; *) continue ;; esac
+      [ -e "$l" ] || { rm "$l"; echo "  prune $l"; }
+    done
+  done
+}
+
+# /go needs superpowers (writing-plans, subagent-driven-development) and mattpocock-skills (grilling).
+install_plugins() {
   if ! command -v claude >/dev/null 2>&1; then
-    echo "  skip  grilling skill (claude CLI not on PATH — /go grill falls back to inline)"
+    echo "  skip  plugins (claude CLI not on PATH) — install superpowers and mattpocock-skills yourself"
     return
   fi
-  if claude plugin list 2>/dev/null | grep -q "mattpocock-skills"; then
-    echo "  have  grilling skill (mattpocock-skills already installed)"
+  install_plugin superpowers superpowers-marketplace https://github.com/obra/superpowers-marketplace.git
+  install_plugin mattpocock-skills claude-plugins-official anthropics/claude-plugins-official
+}
+
+install_plugin() {  # install_plugin <plugin> <marketplace> <marketplace-source>
+  if claude plugin list 2>/dev/null | grep -q "$1"; then
+    echo "  have  $1"
     return
   fi
-  claude plugin marketplace add anthropics/claude-plugins-official >/dev/null 2>&1 || true
-  if claude plugin install mattpocock-skills@claude-plugins-official --scope user >/dev/null 2>&1; then
-    echo "  plug  grilling skill (mattpocock-skills) — /go <task> grill is live"
+  claude plugin marketplace add "$3" >/dev/null 2>&1 || true
+  if claude plugin install "$1@$2" --scope user >/dev/null 2>&1; then
+    echo "  plug  $1"
   else
-    echo "  skip  grilling skill — install it yourself with:"
-    echo "        claude plugin install mattpocock-skills@claude-plugins-official"
+    echo "  skip  $1 — install it yourself: claude plugin install $1@$2"
   fi
 }
 
@@ -135,7 +151,7 @@ fi
 
 if [ "$TARGET" = "cursor" ] || [ "$TARGET" = "both" ]; then
   echo
-  echo "  Note on Cursor: it has no subagent primitive, so /go runs all four minions"
+  echo "  Note on Cursor: it has no subagent primitive, so /go runs all three minions"
   echo "  inline in one context instead of delegating. You lose context isolation,"
   echo "  per-agent models, and read-only enforcement on the reviewer. It works —"
   echo "  it's just not the full crew. Claude Code is where they run properly."
