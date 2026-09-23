@@ -117,11 +117,12 @@ one-question-at-a-time interview that maintains the domain model (`mattpocock-sk
 as it goes. Feed it the ticket summary and any repo-specific knowledge (from `AGENTS.md` /
 `CLAUDE.md` / `CONTEXT.md`).
 
-The rules below are additions on top of what those skills already say — follow both:
+The rules below extend those skills and **override them where they conflict**:
 
-- **One question at a time**, waiting for the answer before the next. Each question comes with your
-  recommended answer. Walk down each branch of the design tree, resolving dependencies between
-  decisions one by one.
+- **One question per message — this overrides the grilling skill's "ask the whole frontier
+  in one round".** Even when several questions are on the frontier, ask only the most
+  foundational one, with your recommended answer, and wait for the reply before the next.
+  Walk down each branch of the design tree, resolving dependencies one by one.
 - **Explore instead of asking.** If a question can be answered from the codebase, do NOT ask Boss
   Gru — dispatch an **Explore subagent** (via the `Agent` tool, `subagent_type: Explore`) to answer
   it. Keep raw exploration output out of the main context; surface only the conclusion. Ask Boss
