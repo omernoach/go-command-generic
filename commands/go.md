@@ -26,7 +26,7 @@ for coordination only. Address the user as "Boss Gru" and use occasional minion 
 | Ticket prefix | `{{TICKET_PREFIX}}` | `ENG`, `PROJ` |
 | Default branch | `{{DEFAULT_BRANCH}}` | `main` |
 | Workspace root (where your repos live) | `{{WORKSPACE_ROOT}}` | `~/code` |
-| Review bot login (Step 8) | `{{REVIEW_BOT_LOGIN}}` | `{{REVIEW_BOT_LOGIN}}` — or `none` to delete Step 8 |
+| Review bot login (Step 8) | `{{REVIEW_BOT_LOGIN}}` | `cursor[bot]` — or `none` to delete Step 8 |
 
 ## Input Parsing
 
@@ -159,14 +159,15 @@ doesn't include it):
 > **Execute with:** superpowers:subagent-driven-development — fresh implementer subagent per task, task review after each, final whole-branch review.
 > **As soon as implementation is done:** Commit, push, and open a **draft** PR (`gh pr create --draft`) — every task ends with an open PR unless the user explicitly says otherwise. Open it **before** the review below, not after — this starts CI immediately instead of leaving it idle while the review runs.
 > **Then, review:** Dispatch the `reviewer` agent (Kevin, `model: opus`) on the pushed branch's changes with **high effort** (broader coverage, deeper analysis). Do NOT review inline — review output stays out of the main context. Surface only Kevin's summary; if he finds anything, fix and push a follow-up commit (this is the push that starts the review bot timer).
-> **After every push:** Wait 5 minutes from the latest push (ScheduleWakeup, not sleep), then dispatch a subagent to fix review-bot comments only — small/local fixes applied, everything else escalated. Restart the timer if another push lands during the wait.
+> **After every push:** Wait 5 minutes from the latest push (ScheduleWakeup; if unavailable, a **background** `sleep 300` — never a blocking sleep), then dispatch a subagent to fix review-bot comments only — small/local fixes applied, everything else escalated. Restart the timer if another push lands during the wait.
 ```
 
 This block exists for fresh-session handoff. When executing in this same session, Steps 6–8 below
 govern — do not run the block's review line separately from Step 7 (they are the same review, done
 once).
 
-Print the plan's absolute path.
+Print the plan's absolute path. Skip writing-plans' own Execution Handoff question — the question
+below replaces it.
 
 **Carl checks the plan once.** Dispatch Carl (`plan-reviewer` agent, `model: opus`) with the plan's
 absolute path and the worktree path. Carl reports:
@@ -202,6 +203,7 @@ By default, execute in this session using the **superpowers:subagent-driven-deve
 - Continuous execution — no "should I continue?" check-ins between tasks. Stop only for BLOCKED,
   genuine ambiguity, or full completion (PR opened AND the review bot pass of Step 8 settled).
 - Track progress in the ledger file per the skill.
+- Do not run `superpowers:finishing-a-development-branch` at the end — Step 7 replaces it.
 
 **Override on re-review after a fix:** the skill's default is to re-dispatch the task reviewer
 after every fix, with no size exception. For this workflow, skip the re-review only when the fix is
@@ -224,7 +226,7 @@ After all tasks pass their reviews:
    - `gh pr create --draft` — title `{{TICKET_PREFIX}}-1234 - type(scope): description`; body: what the
      task was, how it was solved, the grill's settled decisions, and (AUTOPILOT) the **Assumptions**
    - Capture the PR number and repo (owner/name) (`gh pr view --json number,url`) — Step 8 needs
-     them.
+     them. Opening the PR is the default ending of every /go flow.
 2. **Kevin reviews.** Dispatch Kevin (`reviewer` agent, `model: opus`). The prompt includes the
    worktree path, branch name, base branch, an explicit "use high effort — be thorough"
    instruction, and asks for a concise list of findings (bugs, security issues, dead code, missing
@@ -251,12 +253,13 @@ Procedure:
 2. **On wake-up, before dispatching the subagent, verify no newer push has happened.** Run
    `git rev-parse HEAD` (and/or `gh pr view <n> --json headRefOid -q .headRefOid`) and compare to
    `pushed_sha`:
-   - **If HEAD has advanced past `pushed_sha`**: **discard this auto-check pass entirely.** Do not
+   - **If HEAD has advanced past `pushed_sha`** (another push took place during the wait — whether you
+     made it, the user made it, or a follow-up commit landed): **discard this auto-check pass entirely.** Do not
      dispatch the subagent. Update `pushed_sha` to the new HEAD and re-schedule another 5-minute
      wait via `ScheduleWakeup`. Repeat this guard each time you resume.
    - **If HEAD still matches `pushed_sha`**: proceed to step 3.
 3. Dispatch a **general-purpose subagent** via the `Agent` tool to handle the
-   review bot pass. Do not do the work inline. The subagent prompt must be self-contained and include:
+   review bot pass. Do not do the work inline — this keeps the review bot's noisy comment threads out of the main context. The subagent prompt must be self-contained and include:
    - PR number, repo (owner/name), worktree absolute path, branch name, and the `pushed_sha` it
      should treat as the baseline
    - Instruction to fetch PR review comments via `gh api repos/<owner>/<repo>/pulls/<n>/comments`

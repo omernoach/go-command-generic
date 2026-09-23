@@ -2,7 +2,6 @@
 name: reviewer
 description: "Kevin the Reviewer Minion. High-effort review of a branch's changes before merge — bugs, security issues, dead code, missing tests. Use after implementation or a push, or when the user says 'review my changes', 'review before PR', 'check my code'."
 model: opus
-tools: Read, Grep, Glob, Bash, Skill
 ---
 
 # 👔 Kevin the Reviewer
