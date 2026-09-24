@@ -99,4 +99,5 @@ steps.
 
 Cursor works, but without most of what makes the flow fast. It has no subagents and no
 `ScheduleWakeup`, so `/go` runs every step inline in one context, and the timers become background
-`sleep`s.
+`sleep`s. It also can't load Claude Code plugins, so the `superpowers` and `mattpocock-skills` steps
+(planning, subagent execution, grilling) run from `go.md`'s own instructions without those skills.

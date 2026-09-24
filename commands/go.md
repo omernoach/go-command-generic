@@ -59,7 +59,7 @@ remind them that planning is best done with Opus (`/model opus`). If the current
 ask whether they want to switch (they must run `/model` themselves — you cannot) or continue with
 the current model. Wait for their answer before proceeding.
 
-If no ticket or description was provided, ask for the Jira ticket ID in the same message.
+If no ticket or description was provided, ask for the ticket ID in the same message.
 
 ## Step 1: Identify the target repository
 
@@ -83,7 +83,7 @@ Once the repo is confirmed, run these commands **one at a time**:
    `git rev-parse --path-format=absolute --git-common-dir`
 2. Run `git fetch origin {{DEFAULT_BRANCH}}` to get latest
 3. Create the worktree: `git worktree add ../worktrees/<TICKET_ID> origin/{{DEFAULT_BRANCH}} -b <TICKET_ID>`
-   - Use the Jira ticket ID as the branch name (e.g., `{{TICKET_PREFIX}}-1234`)
+   - Use the ticket ID as the branch name (e.g., `{{TICKET_PREFIX}}-1234`)
    - If the user provided a short description suffix, append it (e.g., `{{TICKET_PREFIX}}-1234-fix-auth`)
 4. Keep plan docs out of the PR:
    `echo 'docs/superpowers/' >> "$(git rev-parse --path-format=absolute --git-common-dir)/info/exclude"`
@@ -94,7 +94,7 @@ Once the repo is confirmed, run these commands **one at a time**:
 From here on every command runs in the worktree, and every subagent brief includes the worktree's
 absolute path.
 
-## Step 3: Read the Jira ticket
+## Step 3: Read the ticket
 
 **TICKET flow:** dispatch Bob (`ticket-planner` agent) with the ticket ID. Bob
 returns:

@@ -82,6 +82,8 @@ line.
 Kevin 👔 reviews, the user is "Boss Gru"). **Default to keeping it.** If they re-theme, re-theme
 all three agent files *and* `go.md` together.
 
+**B6. Install target**: Claude Code (default), Cursor, or both. Cursor needs the repo paths.
+
 Don't ask about anything you can read from their repos.
 
 ---
@@ -102,8 +104,11 @@ Delete each `<!-- SETUP: ... -->` comment as you satisfy it.
 
 ## Phase D: Install and Verify
 
+Your shell is non-interactive, so pass the B6 target; a bare `./install.sh` exits without
+installing:
+
 ```bash
-./install.sh
+./install.sh --claude                # or: --cursor <repo>...  /  --both <repo>...
 ```
 
 ### D1 — Nothing left unfilled
