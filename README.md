@@ -42,6 +42,8 @@ review and bot-comment fixes all run in subagents.
 8. **Review-bot loop.** 5 minutes after each push, small bot-comment fixes are applied and the rest
    are escalated.
 
+Step-by-step detail, the interactive vs autopilot differences, and the bot loop: [HOW-IT-WORKS.md](HOW-IT-WORKS.md).
+
 <div align="center">
 
 | | | Minion | Agent | What they do |
