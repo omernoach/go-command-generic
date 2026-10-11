@@ -80,7 +80,13 @@ next to a `<!-- SETUP: -->` comment. Then run `./install.sh`.
 ```
 
 Everything is symlinked, so `git pull` updates the crew with no reinstall. `--claude` also installs
-the `superpowers` and `mattpocock-skills` plugins, and removes links to agents that no longer exist.
+the `superpowers` and `mattpocock-skills` plugins plus the `minions` mod from this repo, and removes
+links to agents that no longer exist. Run `/reload-plugins` after a pull to update the mod.
+
+**Minions mod** ([mods/minions](mods/minions)): a banana progress bar above the prompt for the whole
+flow (phase, build tasks done), and a crew panel where each subagent is a pixel-art minion acting out
+what it's doing. `/go` feeds it through the `mcp__minions__progress` tool and skips it when the mod
+isn't installed. `/minions` toggles the panel, `/minions demo` previews it.
 
 ## 🍌 What the minions need from you
 

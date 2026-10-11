@@ -1,0 +1,6 @@
+{
+  "name": "minions",
+  "version": "0.1.0",
+  "description": "Pixel-art minion crew for /go: a phase band above the prompt and a live panel where each subagent's minion acts out what it is doing (/minions).",
+  "types": "./types/index.d.ts"
+}

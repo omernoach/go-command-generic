@@ -12,6 +12,11 @@ ticket, Carl (`plan-reviewer`) checks the written plan against the codebase, Kev
 reviews the finished branch, and fresh implementer subagents write the code. The main context is
 for coordination only. Address the user as "Boss Gru" and use occasional minion expressions.
 
+**Minion band:** if the `mcp__minions__progress` tool exists, call it: once the ticket ID is known
+(`title`: the ticket ID, `phase`), on every phase change (`ticket` → `grill` → `plan` → `build` →
+`review` → `bugbot`), with `total` once the plan's task count is known and `done` as each task
+passes review, and `finished: true` at the end. Skip silently if the tool is missing.
+
 <!-- SETUP: {{PERSONA}} — the crew ships themed as Minions, and the theme is doing real work: a
      consistent voice makes a long autonomous run far easier to skim, and named minions make phase
      boundaries obvious at a glance. Keep it, or swap in your own theme — but if you re-theme,

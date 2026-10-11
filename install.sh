@@ -94,7 +94,8 @@ prune_dangling() {
   done
 }
 
-# /go needs superpowers (writing-plans, subagent-driven-development) and mattpocock-skills (grilling).
+# /go needs superpowers (writing-plans, subagent-driven-development) and mattpocock-skills (grilling);
+# minions draws its progress band and crew panel.
 install_plugins() {
   if ! command -v claude >/dev/null 2>&1; then
     echo "  skip  plugins (claude CLI not on PATH) — install superpowers and mattpocock-skills yourself"
@@ -102,10 +103,12 @@ install_plugins() {
   fi
   install_plugin superpowers superpowers-marketplace https://github.com/obra/superpowers-marketplace.git
   install_plugin mattpocock-skills claude-plugins-official anthropics/claude-plugins-official
+  # The minion crew mod, read straight from this folder, so `git pull` + /reload-plugins updates it.
+  install_plugin minions go-command-generic "$REPO"
 }
 
 install_plugin() {  # install_plugin <plugin> <marketplace> <marketplace-source>
-  if claude plugin list 2>/dev/null | grep -q "$1"; then
+  if claude plugin list 2>/dev/null | grep -q "$1@$2"; then
     echo "  have  $1"
     return
   fi

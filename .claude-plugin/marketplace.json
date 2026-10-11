@@ -1,0 +1,5 @@
+{
+  "name": "go-command-generic",
+  "owner": { "name": "Omer Noach" },
+  "plugins": [{ "name": "minions", "source": "./mods/minions" }]
+}
