@@ -37,7 +37,7 @@ passes review, and `finished: true` at the end. Skip silently if the tool is mis
 
 1. **`autopilot`** anywhere in the input → remove it, mode is AUTOPILOT. Otherwise INTERACTIVE.
 2. **Ticket ID** matching `{{TICKET_PREFIX}}-\d+` → TICKET flow. Any words left after removing it are the branch
-   suffix (kebab-case them).
+   description (kebab-case them).
 3. **No ticket ID** → QUICK WIN flow. The remaining input is the task description.
 
 ### AUTOPILOT overrides
@@ -87,9 +87,13 @@ Once the repo is confirmed, run these commands **one at a time**:
 1. `cd` into the target repo's **main checkout** — if you're inside a worktree, that's the parent of
    `git rev-parse --path-format=absolute --git-common-dir`
 2. Run `git fetch origin {{DEFAULT_BRANCH}}` to get latest
-3. Create the worktree: `git worktree add ../worktrees/<TICKET_ID> origin/{{DEFAULT_BRANCH}} -b <TICKET_ID>`
-   - Use the ticket ID as the branch name (e.g., `{{TICKET_PREFIX}}-1234`)
-   - If the user provided a short description suffix, append it (e.g., `{{TICKET_PREFIX}}-1234-fix-auth`)
+3. Create the worktree: `git worktree add ../worktrees/<TICKET_ID> origin/{{DEFAULT_BRANCH}} -b <BRANCH>`
+   - `<BRANCH>` is `<TICKET_ID>-<type>-<description>`, e.g. `{{TICKET_PREFIX}}-1234-fix-session-timeout-redirect`
+   - `<type>`: the Conventional Commits type the work ships as (`feat`, `fix`, `chore`, `refactor`,
+     `docs`, `test`, `perf`)
+   - `<description>`: the leftover input words if given, else 2–5 kebab-case words from the ticket title
+   - TICKET flow: the name needs the ticket title, so dispatch Step 3's Bob before this command and
+     reuse his result in Step 3
 4. Keep plan docs out of the PR:
    `echo 'docs/superpowers/' >> "$(git rev-parse --path-format=absolute --git-common-dir)/info/exclude"`
    (skip if the line is already there)

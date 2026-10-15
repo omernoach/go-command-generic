@@ -45,7 +45,7 @@ The last command lists who comments on PRs. A `[bot]` login that shows up often 
 `cursor[bot]`) is the candidate `{{REVIEW_BOT_LOGIN}}`.
 
 Also check `AGENTS.md` / `CLAUDE.md` for push-hook branch-name rules. Branches are named
-`<TICKET>` or `<TICKET>-<suffix>`, so the ticket prefix must satisfy any such hook.
+`<TICKET>-<type>-<description>`, so the ticket prefix must satisfy any such hook.
 
 ### A3 — Inventory the tracker
 

@@ -18,7 +18,7 @@ PR, gets it reviewed, and sweeps up review-bot comments (e.g. Cursor BugBot). It
 | Input | Effect |
 |---|---|
 | `autopilot` (anywhere) | Removed, and the mode becomes AUTOPILOT. Otherwise the run is INTERACTIVE. |
-| `{{TICKET_PREFIX}}-\d+` | TICKET flow. Leftover words become a kebab-case branch suffix, e.g. `PROJ-1234-fix-auth`. |
+| `{{TICKET_PREFIX}}-\d+` | TICKET flow. Leftover words become the kebab-case branch description, e.g. `PROJ-1234-<type>-fix-auth`. |
 | anything else | QUICK WIN flow. The text is the task; `/go` creates a ticket for it first (with your `{{TICKET_DEFAULTS}}`). |
 
 ## Who does what
@@ -47,7 +47,9 @@ PR, gets it reviewed, and sweeps up review-bot comments (e.g. Cursor BugBot). It
 ### 2. Fetch the default branch and create a worktree — *orchestrator*
 - Quick win only: runs `/create-ticket <description>` with your `{{TICKET_DEFAULTS}}`, and uses the new ID.
 - From the main checkout: `git fetch origin {{DEFAULT_BRANCH}}`, then
-  `git worktree add ../worktrees/PROJ-1234 origin/{{DEFAULT_BRANCH}} -b PROJ-1234`.
+  `git worktree add ../worktrees/PROJ-1234 origin/{{DEFAULT_BRANCH}} -b PROJ-1234-fix-session-timeout-redirect`.
+  The branch is `<ticket>-<type>-<description>`: a Conventional Commits type, then the leftover words or
+  2–5 words from the ticket title.
 - Adds `docs/superpowers/` to `.git/info/exclude` so plan docs never land in the PR.
 - Never `git checkout` or `git switch`. Every later command and subagent brief uses the worktree path.
 

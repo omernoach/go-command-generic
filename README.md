@@ -13,7 +13,7 @@ as a draft. You eat da banana.* 🍌
 
 ```
 /go PROJ-1234              # worktree → grill → plan → subagents → draft PR → review → review bot
-/go PROJ-1234 fix-auth     # same, branch PROJ-1234-fix-auth
+/go PROJ-1234 fix-auth     # same, branch PROJ-1234-<type>-fix-auth
 /go Fix the login crash    # no ticket? one gets created first
 /go PROJ-1234 autopilot    # bee do bee do — no grill, decisions recorded as Assumptions
 ```
