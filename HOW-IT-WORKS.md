@@ -29,7 +29,7 @@ PR, gets it reviewed, and sweeps up review-bot comments (e.g. Cursor BugBot). It
 | **Bob** | `ticket-planner` | Fetches the ticket: summary, description, acceptance criteria, links, priority. |
 | **Carl** | `plan-reviewer` (opus) | Checks the written plan against the real codebase once. Returns CLEAN, RISK or BLOCKER. |
 | **Implementers** | fresh subagent per task | haiku for mechanical work, sonnet for integration, opus for design judgment. |
-| **Kevin** | `reviewer` (opus) | High-effort review of the pushed branch. Reports findings, never edits code. |
+| **Kevin** | `reviewer` (opus) | High-effort `code-review` of the pushed branch, as one of review-helper's two reviewers. Reports findings, never edits code. |
 | **Explore / review-bot fixer** | `Explore`, `general-purpose` | Answer codebase questions during the grill; fix small `{{REVIEW_BOT_LOGIN}}` comments after pushes. |
 
 ## The steps
@@ -76,7 +76,7 @@ PR, gets it reviewed, and sweeps up review-bot comments (e.g. Cursor BugBot). It
 ### 5. Write the plan, then Carl checks it — *orchestrator + Carl*
 - `superpowers:writing-plans` writes to `docs/superpowers/plans/`: small, mostly independent tasks,
   each executable by a subagent with no session context.
-- The plan opens with a handoff block (execute, open draft PR, Kevin review, review-bot pass) so a fresh
+- The plan opens with a handoff block (execute, open draft PR, review-helper, review-bot pass) so a fresh
   session can pick it up.
 - Carl reviews once. CLEAN continues; RISK folds his mitigations into the named tasks; BLOCKER goes
   to you.
@@ -93,15 +93,18 @@ PR, gets it reviewed, and sweeps up review-bot comments (e.g. Cursor BugBot). It
   ledger.
 - A final whole-branch review checks plan compliance. It does not replace Kevin.
 
-### 7. Open the draft PR, then Kevin reviews — *orchestrator + Kevin*
+### 7. Open the draft PR, then review-helper — *orchestrator + Kevin*
 - Commits with Conventional Commits (`feat(scope): PROJ-1234 …`), pushes, and runs
   `gh pr create --draft`. Never asks first.
 - The PR opens before review so CI starts immediately. Grill decisions and assumptions go in the
   body.
-- Kevin reviews the branch at high effort. Fix subagents address his findings; large or
-  architectural ones come to you.
+- `minions:review-helper` reviews the PR: Kevin (`code-review`, high effort) and a
+  `ponytail-review` subagent review independently, a consolidator
+  source-checks and merges the results, and a cold-read pass re-checks them into findings and nitpicks.
+- Fix subagents address the findings; large or architectural ones come to you. Nitpicks are listed,
+  not fixed.
 - The fix commit push starts the review-bot timer.
-- **Gate:** not done until the PR is open and Kevin has reviewed it.
+- **Gate:** not done until the PR is open and review-helper's findings are handled.
 
 ### 8. Sweep review-bot comments — *general-purpose*
 - Five minutes after the latest push, a subagent fixes comments from `{{REVIEW_BOT_LOGIN}}`
@@ -146,7 +149,7 @@ Autopilot never calls `AskUserQuestion`. Steps 2, 6, 7 and 8 run the same in bot
   go to Kevin and Carl.
 - **Every run ends in a PR.** Draft, opened without asking, unless you said earlier in the session
   not to push.
-- **Review happens once.** Kevin's high-effort review is the only quality gate after
+- **Review happens once.** review-helper is the only quality gate after
   implementation. The plan block's review line is the same review.
 - **Waits never block.** `ScheduleWakeup`, or a background `sleep` if that tool is missing.
 - **Missing minions run inline.** Where named agents aren't available (Cursor), the step follows the

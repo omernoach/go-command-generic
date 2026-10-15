@@ -126,7 +126,7 @@ grep -h "^name:" agents/*.md   # must be: ticket-planner, plan-reviewer, reviewe
   D1 and fails mid-run otherwise.
 - **Default branch**: `git -C <repo> rev-parse --verify origin/<default>` for each repo.
 - **Review bot**: the login appears in the A2 comment list.
-- **Plugins**: `claude plugin list` shows `superpowers` and `mattpocock-skills`.
+- **Plugins**: `claude plugin list` shows `superpowers`, `mattpocock-skills`, `ponytail` and `minions`.
 
 Report which probes passed. A probe you skipped is a guess.
 

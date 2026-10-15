@@ -20,7 +20,8 @@ as a draft. You eat da banana.* 🍌
 
 Built on [superpowers](https://github.com/obra/superpowers) (`writing-plans`,
 `subagent-driven-development`) and [Matt Pocock's skills](https://github.com/mattpocock/skills)
-(`grilling`, `domain-modeling`). The main session only coordinates: exploration, implementation,
+(`grilling`, `domain-modeling`, `code-review`), plus [ponytail](https://github.com/DietrichGebert/ponytail)
+(`ponytail-review`). The main session only coordinates: exploration, implementation,
 review and bot-comment fixes all run in subagents.
 
 ---
@@ -38,7 +39,8 @@ review and bot-comment fixes all run in subagents.
    against the code. The plan carries a handoff block, so a fresh session can run it too.
 6. **Execute.** One implementer per task, a review per task, and an explicit model on every
    dispatch.
-7. **Draft PR first, then Kevin's high-effort review**, so CI runs while the review does.
+7. **Draft PR first, then `review-helper`** (Kevin's high-effort `code-review` plus `ponytail-review`,
+   consolidated and source-checked), so CI runs while the review does.
 8. **Review-bot loop.** 5 minutes after each push, small bot-comment fixes are applied and the rest
    are escalated.
 
@@ -80,8 +82,8 @@ next to a `<!-- SETUP: -->` comment. Then run `./install.sh`.
 ```
 
 Everything is symlinked, so `git pull` updates the crew with no reinstall. `--claude` also installs
-the `superpowers` and `mattpocock-skills` plugins plus the `minions` mod from this repo, and removes
-links to agents that no longer exist. Run `/reload-plugins` after a pull to update the mod.
+the `superpowers`, `mattpocock-skills` and `ponytail` plugins plus the `minions` mod (which ships the
+`review-helper` skill) from this repo, and removes links to agents that no longer exist. Run `/reload-plugins` after a pull to update the mod.
 
 **Minions mod** ([mods/minions](mods/minions)): a banana progress bar above the prompt for the whole
 flow (phase, build tasks done), and a crew panel where each subagent is a pixel-art minion acting out

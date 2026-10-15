@@ -94,15 +94,17 @@ prune_dangling() {
   done
 }
 
-# /go needs superpowers (writing-plans, subagent-driven-development) and mattpocock-skills (grilling);
-# minions draws its progress band and crew panel.
+# /go needs superpowers (writing-plans, subagent-driven-development), mattpocock-skills (grilling,
+# code-review) and ponytail (ponytail-review, used by review-helper); minions draws its progress band
+# and crew panel and ships the review-helper skill.
 install_plugins() {
   if ! command -v claude >/dev/null 2>&1; then
-    echo "  skip  plugins (claude CLI not on PATH) — install superpowers and mattpocock-skills yourself"
+    echo "  skip  plugins (claude CLI not on PATH) — install superpowers, mattpocock-skills and ponytail yourself"
     return
   fi
   install_plugin superpowers superpowers-marketplace https://github.com/obra/superpowers-marketplace.git
   install_plugin mattpocock-skills claude-plugins-official anthropics/claude-plugins-official
+  install_plugin ponytail ponytail DietrichGebert/ponytail
   # The minion crew mod, read straight from this folder, so `git pull` + /reload-plugins updates it.
   install_plugin minions go-command-generic "$REPO"
 }
